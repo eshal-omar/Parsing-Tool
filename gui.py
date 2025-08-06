@@ -19,16 +19,16 @@ class ProgramAnalyzerGUI:
         self.root.title("Program Analyzer Tool")
         self.root.geometry("1200x800")
         
-        # Create the main notebook for tabs
+        # main notebook for tabs
         self.notebook = ttk.Notebook(root)
         self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # Create verification mode tab
+        # verification mode tab
         self.verification_tab = ttk.Frame(self.notebook)
         self.notebook.add(self.verification_tab, text="Verification Mode")
         self.setup_verification_tab()
         
-        # Create equivalence mode tab
+        #equivalence mode tab
         self.equivalence_tab = ttk.Frame(self.notebook)
         self.notebook.add(self.equivalence_tab, text="Equivalence Mode")
         self.status_var = tk.StringVar(value="Ready")
@@ -44,7 +44,7 @@ class ProgramAnalyzerGUI:
         self.setup_ssa_cfg_tab()
     
     def setup_verification_tab(self):
-        # Create a frame for input and controls
+        # frame for input and controls
         input_frame = ttk.LabelFrame(self.verification_tab, text="Input Program")
         input_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
@@ -72,7 +72,7 @@ class ProgramAnalyzerGUI:
         process_button = ttk.Button(input_frame, text="Process Program", command=self.process_verification)
         process_button.grid(row=2, column=1, columnspan=2, padx=5, pady=10)
         
-        # Create a frame for output tabs
+        #frame for output tabs
         output_frame = ttk.LabelFrame(self.verification_tab, text="Analysis Results")
         output_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
@@ -113,7 +113,7 @@ class ProgramAnalyzerGUI:
         input_frame.rowconfigure(3, weight=1)
     
     def setup_equivalence_tab(self):
-        # Create a frame for input and controls
+        #frame for input and controls
         input_frame = ttk.LabelFrame(self.equivalence_tab, text="Input Programs")
         input_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
@@ -141,7 +141,7 @@ class ProgramAnalyzerGUI:
         process_button = ttk.Button(controls_frame, text="Compare Programs", command=self.process_equivalence)
         process_button.grid(row=0, column=2, padx=20, pady=5)
         
-        # Create a frame for output tabs
+        #frame for output tabs
         output_frame = ttk.LabelFrame(self.equivalence_tab, text="Comparison Results")
         output_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
@@ -279,7 +279,6 @@ class ProgramAnalyzerGUI:
                 with open(smt_file, 'r', encoding='utf-8') as f:
                     smt_content = f.read()
             except UnicodeDecodeError:
-                # Try with a more permissive encoding
                 with open(smt_file, 'r', encoding='latin-1', errors='replace') as f:
                     smt_content = f.read()
             
@@ -415,7 +414,7 @@ class ProgramAnalyzerGUI:
                 for ver_detail in ver_details:
                     self.equiv_results_output.insert(tk.END, ver_detail + "\n")
             
-        # Add a separator if we're going to show both sets of results
+        
             if details:
                 self.equiv_results_output.insert(tk.END, "\n--- Original check_equivalence results: ---\n\n")
                 self.equiv_results_output.insert(tk.END, result_msg + "\n\n")
@@ -437,7 +436,7 @@ class ProgramAnalyzerGUI:
 
     def setup_cfg_tab(self):
         """Set up the Control Flow Graph visualization tab"""
-        # Create a frame for input and controls
+        #frame for input and controls
         input_frame = ttk.LabelFrame(self.cfg_tab, text="Program Input")
         input_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
@@ -465,18 +464,18 @@ class ProgramAnalyzerGUI:
         input_frame.columnconfigure(2, weight=1)
         input_frame.rowconfigure(1, weight=1)
         
-        # Create a frame for the visualization
+        #frame for the visualization
         self.visualization_frame = ttk.LabelFrame(self.cfg_tab, text="Control Flow Graph")
         self.visualization_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
     
 
     def setup_ssa_cfg_tab(self):
         """Set up the SSA (Static Single Assignment) CFG (Control Flow Graph) tab."""
-        # Create a frame for the SSA CFG tab
+        #frame for the SSA CFG tab
         self.ssa_cfg_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.ssa_cfg_frame, text="SSA CFG")
         
-        # Create top frame for controls
+        #top frame for controls
         control_frame = ttk.Frame(self.ssa_cfg_frame)
         control_frame.pack(fill=tk.X, padx=10, pady=5)
         
@@ -486,7 +485,7 @@ class ProgramAnalyzerGUI:
         # ttk.Button(control_frame, text="Export SSA CFG", 
         #         command=self.export_ssa_cfg).pack(side=tk.LEFT, padx=5)
         
-        # Create a frame for the SSA CFG visualization
+        #frame for the SSA CFG visualization
         self.ssa_cfg_view_frame = ttk.Frame(self.ssa_cfg_frame)
         self.ssa_cfg_view_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
         
@@ -494,7 +493,7 @@ class ProgramAnalyzerGUI:
         self.ssa_cfg_canvas = tk.Canvas(self.ssa_cfg_view_frame, bg="white")
         self.ssa_cfg_canvas.pack(fill=tk.BOTH, expand=True)
         
-        # You may need to add these methods to your class
+        
         # def generate_ssa_cfg(self):
         #     # Add implementation to generate and display SSA CFG
         #     pass
@@ -562,7 +561,7 @@ class ProgramAnalyzerGUI:
         for detail in details:
             self.results_output_text.insert(tk.END, detail + "\n")
         
-        # Optionally, add SSA and SMT information for debugging
+        
         # if ssa:
         #     self.output_text.insert(tk.END, "\n\nSSA Representation:\n")
         #     self.output_text.insert(tk.END, str(ssa))
@@ -579,14 +578,14 @@ class ProgramAnalyzerGUI:
             # Get the program code
             code = self.cfg_program_input.get(1.0, tk.END)
             
-            # Create a graph from the program code
+            #graph from the program code
             G = self.create_cfg_from_code(code)
             
             # Clear any existing plot in the visualization frame
             for widget in self.visualization_frame.winfo_children():
                 widget.destroy()
             
-            # Create a figure and canvas
+            #figure and canvas
             fig = plt.Figure(figsize=(8, 6), dpi=100)
             ax = fig.add_subplot(111)
             
@@ -751,56 +750,7 @@ class ProgramAnalyzerGUI:
         
       
             return G
-    # def setup_cfg_tab(self):
-    #     """Set up the Control Flow Graph visualization tab"""
-    #     # Create a frame for input and controls
-    #     input_frame = ttk.LabelFrame(self.cfg_tab, text="Program Input")
-    #     input_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        
-    #     # Program input
-    #     ttk.Label(input_frame, text="Enter your program:").grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
-    #     self.cfg_program_input = scrolledtext.ScrolledText(input_frame, width=60, height=15)
-    #     self.cfg_program_input.grid(row=1, column=0, rowspan=3, padx=5, pady=5, sticky=tk.NSEW)
-        
-    #     # Example programs dropdown
-    #     ttk.Label(input_frame, text="Examples:").grid(row=0, column=1, sticky=tk.W, padx=5, pady=5)
-    #     self.cfg_examples_var = tk.StringVar()
-    #     self.cfg_examples_dropdown = ttk.Combobox(input_frame, textvariable=self.cfg_examples_var)
-    #     self.cfg_examples_dropdown['values'] = ('Select an example', 'If-Else Example', 'Loop Example', 'Bubble Sort Example')
-    #     self.cfg_examples_dropdown.current(0)
-    #     self.cfg_examples_dropdown.grid(row=0, column=2, padx=5, pady=5, sticky=tk.W)
-    #     self.cfg_examples_dropdown.bind('<<ComboboxSelected>>', self.load_cfg_example)
-        
-    #     # Loop unrolling depth for SSA CFG
-    #     ttk.Label(input_frame, text="Unrolling Depth:").grid(row=1, column=1, sticky=tk.W, padx=5, pady=5)
-    #     self.cfg_depth_var = tk.StringVar(value="2")
-    #     depth_spinbox = ttk.Spinbox(input_frame, from_=1, to=10, textvariable=self.cfg_depth_var, width=5)
-    #     depth_spinbox.grid(row=1, column=2, padx=5, pady=5, sticky=tk.W)
-        
-    #     # Process buttons
-    #     process_button = ttk.Button(input_frame, text="Generate Original CFG", command=self.generate_cfg)
-    #     process_button.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
-        
-    #     process_ssa_button = ttk.Button(input_frame, text="Generate SSA CFG", command=self.generate_ssa_cfg)
-    #     process_ssa_button.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
-        
-    #     # Configure grid weights
-    #     input_frame.columnconfigure(0, weight=3)
-    #     input_frame.columnconfigure(1, weight=1)
-    #     input_frame.columnconfigure(2, weight=1)
-    #     input_frame.rowconfigure(1, weight=1)
-        
-    #     # Create a notebook for both original and SSA CFGs
-    #     self.cfg_notebook = ttk.Notebook(self.cfg_tab)
-    #     self.cfg_notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        
-    #     # Create frames for each CFG visualization
-    #     self.original_cfg_frame = ttk.Frame(self.cfg_notebook)
-    #     self.cfg_notebook.add(self.original_cfg_frame, text="Original CFG")
-        
-    #     self.ssa_cfg_frame = ttk.Frame(self.cfg_notebook)
-    #     self.cfg_notebook.add(self.ssa_cfg_frame, text="SSA CFG")
-
+   
     def generate_cfg(self):
         """Generate and display a Control Flow Graph for the given program"""
         try:
@@ -979,102 +929,6 @@ class ProgramAnalyzerGUI:
             import traceback
             traceback.print_exc()
 
-
-
-
-    # def generate_ssa_cfg(self):
-    #     """Generate and display a Control Flow Graph for the SSA form of the program"""
-    #     try:
-    #         # Get the program code and unrolling depth
-    #         code = self.cfg_program_input.get(1.0, tk.END)
-    #         depth = int(self.cfg_depth_var.get())
-            
-    #         # Unroll loops and convert to SSA
-    #         unrolled_code, ssa_code = unroll_and_convert_to_ssa(code, depth)
-            
-    #         # Create a graph from the SSA code
-    #         G = self.create_cfg_from_code(ssa_code)
-            
-    #         # Clear any existing plot in the SSA CFG frame
-    #         for widget in self.ssa_cfg_frame.winfo_children():
-    #             widget.destroy()
-            
-    #         # Create a splitview: SSA code on left, graph on right
-    #         paned_window = ttk.PanedWindow(self.ssa_cfg_frame, orient=tk.HORIZONTAL)
-    #         paned_window.pack(fill=tk.BOTH, expand=True)
-            
-    #         # Left side: SSA code display
-    #         left_frame = ttk.Frame(paned_window)
-    #         paned_window.add(left_frame, weight=1)
-            
-    #         ttk.Label(left_frame, text="SSA Form:").pack(anchor=tk.W, padx=5, pady=5)
-    #         ssa_display = scrolledtext.ScrolledText(left_frame)
-    #         ssa_display.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-    #         ssa_display.insert(tk.END, ssa_code)
-    #         ssa_display.config(state=tk.DISABLED)  # Make read-only
-            
-    #         # Right side: Graph visualization
-    #         right_frame = ttk.Frame(paned_window)
-    #         paned_window.add(right_frame, weight=2)
-            
-    #         # Create a figure and canvas
-    #         fig = plt.Figure(figsize=(8, 6), dpi=100)
-    #         ax = fig.add_subplot(111)
-            
-    #         # Display the graph with hierarchical layout for better SSA visualization
-    #         try:
-    #             pos = nx.nx_agraph.graphviz_layout(G, prog='dot')  # Hierarchical layout
-    #         except:
-    #             pos = nx.spring_layout(G, seed=42)  # Fallback to spring layout
-            
-    #         # Draw nodes with SSA-specific styling
-    #         for node in G.nodes():
-    #             is_phi = False
-    #             if 'label' in G.nodes[node]:
-    #                 label = G.nodes[node]['label']
-    #                 if 'phi' in str(label).lower():  # Highlight phi functions
-    #                     is_phi = True
-                
-    #             if is_phi:
-    #                 nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=[node], 
-    #                                     node_size=1000, node_color='lightcoral', alpha=0.8)
-    #             else:
-    #                 nx.draw_networkx_nodes(G, pos, ax=ax, nodelist=[node], 
-    #                                     node_size=1000, node_color='lightblue', alpha=0.8)
-            
-    #         # Draw edges
-    #         nx.draw_networkx_edges(G, pos, ax=ax, width=1.5, arrowsize=15)
-            
-    #         # Draw labels with smaller font for complex SSA expressions
-    #         nx.draw_networkx_labels(G, pos, ax=ax, font_size=7)
-            
-    #         # Draw edge labels
-    #         edge_labels = nx.get_edge_attributes(G, 'label')
-    #         nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=7)
-            
-    #         # Remove axis
-    #         ax.set_axis_off()
-            
-    #         # Add title
-    #         ax.set_title(f"SSA Control Flow Graph (Unrolling Depth: {depth})")
-            
-    #         # Embed in Tkinter
-    #         canvas = FigureCanvasTkAgg(fig, master=right_frame)
-    #         canvas.draw()
-    #         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
-            
-    #         # Add toolbar for interactive features
-    #         from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
-    #         toolbar = NavigationToolbar2Tk(canvas, right_frame)
-    #         toolbar.update()
-            
-    #         # Switch to SSA CFG tab
-    #         self.cfg_notebook.select(1)
-        
-    #     except Exception as e:
-    #         messagebox.showerror("Error", f"An error occurred while generating the SSA CFG: {str(e)}")
-    #         import traceback
-    #         traceback.print_exc()
 
 
     def setup_cfg_tab(self):
@@ -1261,10 +1115,6 @@ class ProgramAnalyzerGUI:
             print("Exception details:")
             import traceback
             traceback.print_exc()
-
-
-
-
 
 
 

@@ -74,7 +74,6 @@ class SSAConverter:
                 ssa_ast.append(assert_ssa)
             
             else:
-                # Just pass through nodes we don't specifically handle
                 self.ssa_code.append(node)
                 ssa_ast.append(node)
         
@@ -85,7 +84,7 @@ class SSAConverter:
         var = node.value["var"]
         expr = node.value["expr"]
         
-        # Replace variables in the expression with their current versions
+        
         ssa_expr = self._replace_vars_in_expr(expr)
         
         # Check if this is an array assignment
@@ -735,70 +734,5 @@ def unroll_and_convert_to_ssa(code, depth):
 
 from parser import ASTNode, parse_program
 
-# def extract_assertions(ast):
-#     """
-#     Extract all assertions from the AST and return them as a list.
-    
-#     Args:
-#         ast: The Abstract Syntax Tree to analyze
-        
-#     Returns:
-#         A list of assertion expressions
-#     """
-#     assertions = []
-    
-#     def traverse_ast(nodes):
-#         for node in nodes:
-#             if node.type == "assert":
-#                 assertions.append(node.value)
-            
-#             # Recursively process child nodes
-#             if node.children:
-#                 if node.type == "if":
-#                     # If statement has 'then' and 'else' blocks as children
-#                     traverse_ast(node.children[0].children)  # Then block
-#                     traverse_ast(node.children[1].children)  # Else block
-#                 else:
-#                     traverse_ast(node.children)
-    
-#     traverse_ast(ast)
-#     return assertions
 
-# def extract_assertions_from_code(code):
-#     """
-#     Extract all assertions from the given code and return them as a list.
-    
-#     Args:
-#         code: Source code as a string
-        
-#     Returns:
-#         A list of assertion expressions
-#     """
-#     ast = parse_program(code)
-#     return extract_assertions(ast)
-
-# def extract_assertions_from_ssa(ssa_code):
-#     """
-#     Extract all assertions from the SSA code and return them as a list.
-#     This is useful to get assertions after SSA conversion.
-    
-#     Args:
-#         ssa_code: SSA code as a string
-        
-#     Returns:
-#         A list of assertion expressions in SSA form
-#     """
-#     # Parse the SSA code (this assumes the parser can handle SSA code format)
-#     try:
-#         ast = parse_program(ssa_code)
-#         return extract_assertions(ast)
-#     except:
-#         # If parsing fails, use a simple regex-based approach
-#         import re
-#         assertions = []
-#         # Match assert statements like "assert(condition)"
-#         matches = re.findall(r'assert\((.*?)\)', ssa_code)
-#         for match in matches:
-#             assertions.append(match)
-#         return assertions
 

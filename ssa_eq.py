@@ -109,8 +109,6 @@ def convert_to_ssa(ast_node, prefix=""):
                 transform_expression(stmt.expression)
             )
         elif isinstance(stmt.variable, ArrayAccess):
-            # Array assignment is more complex in SSA
-            # We need to create a new version of the array
             array_name = stmt.variable.array
             new_array = get_new_var(array_name)
             return SSAAssignment(
@@ -189,8 +187,7 @@ def convert_to_ssa(ast_node, prefix=""):
                     )
                 )
         
-        # We'll now return the condition assignment followed by both branches (without if statement)
-        # and then the phi nodes
+        
         result = [condition_assignment]
         result.extend(ssa_then)
         result.extend(ssa_else)
@@ -204,7 +201,6 @@ def convert_to_ssa(ast_node, prefix=""):
         before_vars = var_versions.copy()
         
         # Create phi nodes for all variables that might be modified in the loop
-        # This is conservative - we create phi nodes for all variables defined so far
         phi_nodes = []
         for var in var_versions:
             new_var = get_new_var(var)
@@ -226,9 +222,8 @@ def convert_to_ssa(ast_node, prefix=""):
         after_vars = var_versions.copy()
         for var in after_vars:
             if before_vars.get(var, -1) != after_vars.get(var, -1):
-                # Only create a new version if the variable was modified in the loop
                 new_var = get_new_var(var)
-                # No need to add an explicit phi function here, as control flow is linear
+                
         
         return SSAWhileLoop(ssa_condition, ssa_body, phi_nodes)
     

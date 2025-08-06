@@ -183,7 +183,7 @@ class SSAConverter(ast.NodeVisitor):
             except RecursionError as e:
                 print(f"Recursion error processing: {ast.dump(stmt, annotate_fields=False)}")
                 raise
-        # Add return if not already present
+        
         if not self.program.exit_blocks:
             self.program.exit_blocks.append(self.current_block)
         return self.program
@@ -205,8 +205,7 @@ class SSAConverter(ast.NodeVisitor):
                 inst = AssignmentInst(result=ssa_name, expr=rhs)
                 self.program.add_instruction(self.current_block, inst)
             else:
-                # Handle more complex assignments (e.g., a.b = c, a[i] = v)
-                # This would require more complex SSA handling
+                
                 pass
 
     def visit_Name(self, node):
@@ -232,7 +231,6 @@ class SSAConverter(ast.NodeVisitor):
         
         # Create a temporary for the attribute access
         temp = self.program.new_temp("attr")
-        # In real implementation, this would need more complex handling
         inst = AssignmentInst(result=temp, expr=f"{value}.{node.attr}")
         self.program.add_instruction(self.current_block, inst)
         return temp
@@ -331,7 +329,7 @@ class SSAConverter(ast.NodeVisitor):
                 self.visit(stmt)
             if_end_block = self.current_block
             
-            # Add jump to continuation if needed
+            
             if not self.current_block in self.program.exit_blocks:
                 jump = BranchInst(true_label=cont_block)
                 self.program.add_instruction(self.current_block, jump)
@@ -350,7 +348,7 @@ class SSAConverter(ast.NodeVisitor):
             
             else_end_block = self.current_block
             
-            # Add jump to continuation if needed
+           
             if not self.current_block in self.program.exit_blocks:
                 jump = BranchInst(true_label=cont_block)
                 self.program.add_instruction(self.current_block, jump)
@@ -359,12 +357,11 @@ class SSAConverter(ast.NodeVisitor):
             # Save the false branch variables
             else_vars = self.variables.copy()
             
-            # Merge variables at the continuation point using phi functions
+            
             self.current_block = cont_block
             all_vars = set(if_vars.keys()) | set(else_vars.keys())
             for var in all_vars:
                 if var in if_vars and var in else_vars and if_vars[var] != else_vars[var]:
-                    # We need a phi function for this variable
                     phi_target = self.program.new_temp(var)
                     phi_sources = {
                         if_end_block: if_vars.get(var, "undefined"),
@@ -374,8 +371,6 @@ class SSAConverter(ast.NodeVisitor):
                     self.program.add_instruction(self.current_block, phi)
                     self.variables[var] = phi_target
         except RecursionError:
-            # If recursion error occurs during if statement processing,
-            # revert to a simpler implementation
             print(f"Recursion error in If node, using simplified processing")
             self.current_block = prev_block  # Restore to block before if statement
             # Create a simple result for the if condition
@@ -422,7 +417,7 @@ class SSAConverter(ast.NodeVisitor):
 
     def visit_For(self, node):
         """Visit a for statement node (simplified)."""
-        # This is a simplified implementation that doesn't handle all Python for semantics
+       
         
         # Create blocks for the loop header, body, and exit
         init_block = self.program.new_temp("for_init")
@@ -488,7 +483,7 @@ class SSAConverter(ast.NodeVisitor):
         self.program.add_instruction(self.current_block, jump)
         self.program.add_edge(self.current_block, header_block)
         
-        # Continue from the exit block
+        
         self.current_block = exit_block
 
     def visit_Return(self, node):
@@ -497,11 +492,11 @@ class SSAConverter(ast.NodeVisitor):
         if node.value:
             value = self.visit(node.value)
         
-        # Add the return instruction
+       
         ret = ReturnInst(value=value)
         self.program.add_instruction(self.current_block, ret)
         
-        # Mark this block as an exit block
+
         if self.current_block not in self.program.exit_blocks:
             self.program.exit_blocks.append(self.current_block)
 
@@ -514,8 +509,6 @@ class SSAConverter(ast.NodeVisitor):
         """Look up a variable in the scopes."""
         if name in self.variables:
             return self.variables[name]
-        # If the variable is not defined, create a new one
-        # This is a simplification - in a real compiler, undefined variables would be an error
         ssa_name = self.program.new_temp(f"undef_{name}")
         self.define_variable(name, ssa_name)
         return ssa_name
@@ -527,11 +520,9 @@ class SSAConverter(ast.NodeVisitor):
     def pop_scope(self):
         """Pop the current scope from the stack."""
         old_scope = self.scopes.pop()
-        # Restore the variables from the previous scope
         for name, value in old_scope.items():
             if name in self.variables and self.variables[name] == value:
-                # If this variable was defined in this scope and hasn't changed, remove it
-                # Otherwise, try to find it in a parent scope
+               
                 for scope in reversed(self.scopes):
                     if name in scope:
                         self.variables[name] = scope[name]
@@ -542,16 +533,15 @@ class SSAConverter(ast.NodeVisitor):
 
 def ast_to_ssa(source_code):
     """Convert Python source code to SSA form."""
-    # Increase recursion limit to handle larger ASTs
     import sys
     original_limit = sys.getrecursionlimit()
     try:
-        sys.setrecursionlimit(10000)  # Increase limit - adjust as needed
+        sys.setrecursionlimit(10000)  
         tree = ast.parse(source_code)
         converter = SSAConverter()
         return converter.visit(tree)
     finally:
-        sys.setrecursionlimit(original_limit)  # Restore original limit
+        sys.setrecursionlimit(original_limit)  
 
 
 def print_ssa_program(program):
@@ -568,5 +558,3 @@ def print_ssa_program(program):
         if block.successors:
             print(f"  Successors: {', '.join(block.successors)}")
 
-
-# Example usage

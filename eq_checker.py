@@ -57,7 +57,7 @@ def check_equivalence(program1: str, program2: str):
             # Step 5: Combine SMT files to check for equivalence
             with open(combined_path, 'w') as outf:
                 outf.write("; Combined SMT for equivalence checking\n")
-                outf.write("(set-logic QF_LIA)\n")  # Only one logic line allowed
+                outf.write("(set-logic QF_LIA)\n")  
                 
                 for line in smt1_lines:
                     if not line.startswith("(set-logic"):
@@ -67,8 +67,7 @@ def check_equivalence(program1: str, program2: str):
                     if not line.startswith("(set-logic"):
                         outf.write(line + "\n")
                 
-                # Find the final result variables for both programs
-                # This handles cases with or without branches (which affects variable numbering)
+                
                 p1_result_vars = [line for line in smt1_lines if "p1_result_" in line]
                 p2_result_vars = [line for line in smt2_lines if "p2_result_" in line]
                 
@@ -84,8 +83,8 @@ def check_equivalence(program1: str, program2: str):
                 p2_result_vars.sort(key=extract_var_number)
                 
                 # Get the last result variable name for each program
-                p1_final_var = "p1_result_0"  # Default value
-                p2_final_var = "p2_result_0"  # Default value
+                p1_final_var = "p1_result_0"  
+                p2_final_var = "p2_result_0"  # Default values
                 
                 if p1_result_vars:
                     p1_final_var_match = re.search(r'p1_result_(\d+)', p1_result_vars[-1])
@@ -108,8 +107,6 @@ def check_equivalence(program1: str, program2: str):
             # Step 7: Process the result
             if result == "unsat":
                 # Programs are equivalent if the inequality constraint is unsatisfiable
-                # Let's construct a simple model where programs behave the same
-                # We'll construct a simple example with x = 5 for illustration
                 example = {"x": "5", "p1_result": "same", "p2_result": "same"}
                 example_str = format_model_for_display(example)
                 
@@ -161,8 +158,7 @@ def check_equivalence(program1: str, program2: str):
                     initial_value = versions.get(0, "unknown")
                     counter_examples.append(f"{var_name} = {initial_value}")
                 
-                # Generate a new counterexample with different input values
-                # For simplicity, modify the existing values slightly
+                
                 counter_examples2 = []
                 for entry in counter_examples:
                     if "=" in entry:
@@ -301,7 +297,7 @@ def verify_program(program1: str, program2: str):
             # Step 5: First check if programs can have different behavior
             with open(combined_path, 'w') as outf:
                 outf.write("; Combined SMT for equivalence checking\n")
-                outf.write("(set-logic QF_LIA)\n")  # Only one logic line allowed
+                outf.write("(set-logic QF_LIA)\n")  
                 
                 # Write all declarations and assertions from program 1
                 for line in smt1_lines:
@@ -343,8 +339,7 @@ def verify_program(program1: str, program2: str):
                     "program2_result": p2_result_val
                 })
                 
-                # Need to find at least one more counterexample
-                # Define potential test values based on the first counterexample
+                
                 more_counterexamples_needed = 1
                 
                 # Try different approaches to get more counterexamples
@@ -369,7 +364,7 @@ def verify_program(program1: str, program2: str):
                 def is_number(s):
                     return s.lstrip('-').isdigit()
                 
-                # Try each approach until we have enough counterexamples
+               
                 for approach in approaches:
                     if len(counterexamples) > more_counterexamples_needed:
                         break
@@ -415,7 +410,7 @@ def verify_program(program1: str, program2: str):
                                     outf.write(line + "\n")
                                     written_assertions.add(line)
                         
-                        # Make sure results differ
+                        
                         outf.write(f"(assert (not (= {p1_final_var} {p2_final_var})))\n")
                         outf.write("(check-sat)\n")
                         outf.write("(get-model)\n")
@@ -438,8 +433,7 @@ def verify_program(program1: str, program2: str):
                             "program2_result": p2_result_val
                         })
                 
-                # Generate same example - check if we can find at least one case where programs behave the same
-                # Even if programs are not equivalent, there may be inputs where they produce the same result
+                
                 same_behavior_examples = []
                 
                 # Try a few different inputs to find matching behavior
@@ -500,7 +494,6 @@ def verify_program(program1: str, program2: str):
                             "common_result": result_val
                         })
                         
-                        # One example of same behavior is enough
                         break
                 
                 # Format the final result message
@@ -531,8 +524,6 @@ def verify_program(program1: str, program2: str):
                 )
                 
             elif result == "unsat":  # Programs ARE equivalent
-                # Generate concrete examples where both programs behave the same
-                # For equivalent programs, we need to generate at least 3 examples
                 equivalent_examples = []
                 
                 # Generate different test values based on number of input variables

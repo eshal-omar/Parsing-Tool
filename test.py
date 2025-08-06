@@ -17,19 +17,12 @@ def validate_postcondition(test_cases, smt_formula, input_vars, output_vars):
     
     # Process each test case
     for test_case in test_cases:
-        # In a real implementation, this would call parse_smt_model
-        # Here we'll hardcode the results for demonstration
-        
-        # For each test case, we create a simulated final state
         ex_final_values = {}
         
-        # Create some hardcoded results for each test case
-        # This simulates what would normally come from the SMT solver
         if 'x' in test_case and 'y' in test_case:
-            # Hard-code z based on x+y
             if 'z' not in ex_final_values:
         
-        # Store this example
+        
                 valid_examples.append({
             "inputs": test_case,
             # "final_state": ex_final_state
@@ -67,7 +60,7 @@ def validate_postcondition(test_cases, smt_formula, input_vars, output_vars):
         smt_lines
     )
 
-# Example usage:
+
 if __name__ == "__main__":
     # Sample test cases
     test_cases = [
@@ -80,7 +73,7 @@ if __name__ == "__main__":
     input_vars = ["x", "y", "arr_0"]
     output_vars = ["z", "result"]
     
-    # Sample SMT formula (not actually used in this hardcoded version)
+    # Sample SMT formula 
     smt_formula = "(assert (= z_1 (+ x_0 y_0)))"
     
     # Run the validation

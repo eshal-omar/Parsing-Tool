@@ -37,8 +37,6 @@ def ssa_to_smt(ssa_ast: SSAProgram, output_file: str, result_var: str = "result"
                 return "Bool"
             # Conditional operations return the type of their branches
             elif op in ["?", ":"]:
-                # For conditional expressions like (cond ? then_expr : else_expr)
-                # The type depends on then_expr and else_expr, which should match
                 return determine_type(expr.right)
             # Arithmetic operations return Int
             else:
@@ -94,17 +92,12 @@ def ssa_to_smt(ssa_ast: SSAProgram, output_file: str, result_var: str = "result"
             
             if op in op_map:
                 if op == "?":
-                    # If this is part of a conditional expression (ternary operator)
-                    # We need to find the associated ":" operator and its right expression
                     if hasattr(expr.right, 'op') and expr.right.op == ':':
                         then_expr = translate_expression(expr.right.left)
                         else_expr = translate_expression(expr.right.right)
                         return f"(ite {left_smt} {then_expr} {else_expr})"
                     else:
-                        # If there's no ":" operator directly attached, look deeper
-                        # This is a simplified approach - ideally we would traverse the AST properly
                         middle_smt = right_smt
-                        # Default else branch - in reality this needs proper handling
                         else_smt = "0"  # Using a default value as fallback
                         return f"(ite {left_smt} {middle_smt} {else_smt})"
                 else:
@@ -112,9 +105,6 @@ def ssa_to_smt(ssa_ast: SSAProgram, output_file: str, result_var: str = "result"
             
             # Handle the ":" operator as part of ternary expressions
             elif op == ":":
-                # This should be handled as part of the "?" operator processing
-                # But in case we encounter it separately, treat it as a pass-through to the left operand
-                # This is just a fallback and might not be correct in all contexts
                 return left_smt
             
             elif op == "with":
@@ -180,8 +170,7 @@ def ssa_to_smt(ssa_ast: SSAProgram, output_file: str, result_var: str = "result"
                 for s in stmt.else_branch:
                     process_statement(s)
             
-            # No need to add explicit constraints for if-else
-            # as the phi functions will handle the control flow
+            
         
         elif isinstance(stmt, SSAWhileLoop):
             # Process phi nodes
@@ -196,12 +185,9 @@ def ssa_to_smt(ssa_ast: SSAProgram, output_file: str, result_var: str = "result"
             for s in stmt.body:
                 process_statement(s)
             
-            # Handle loop termination condition
-            # This is a simplification - in reality, we'd need loop unrolling or induction
-            # Here we just assume the loop terminates and variables have their final values
+            
         
         else:
-            # Skip other statement types or handle them as needed
             pass
     
     # Process all statements

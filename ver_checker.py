@@ -104,8 +104,7 @@ def verify_program_ver(smt_content: str, unrolled_code: str = None):
                 outf.write("; Combined SMT for postcondition verification\n")
                 outf.write("(set-logic QF_LRA)\n")  # Linear Integer Arithmetic
                 
-                # Write all declarations and assertions from the program
-                # Skip duplicates and fix formatting issues
+               
                 written_lines = set()
                 for line in smt_lines:
                     # Skip malformed or duplicated lines
@@ -204,7 +203,7 @@ def verify_program_ver(smt_content: str, unrolled_code: str = None):
                     "final_state": final_state
                 })
                 
-                # Need to find at least one more counterexample
+                
                 more_counterexamples_needed = 1
                 
                 # Helper function to check if a string is a number
@@ -507,9 +506,7 @@ def verify_program_ver(smt_content: str, unrolled_code: str = None):
                     unrolled_code, smt_lines
                 )
                 
-            elif result == "unsat":  # Postcondition holds for all inputs
-                # Generate concrete examples where postcondition holds
-                # We want to generate at least 3 different examples
+            elif result == "unsat":  
                 valid_examples = []
                 
                 # Generate different test values based on number of input variables
@@ -752,22 +749,15 @@ def validate_postcondition(test_cases, smt_formula, input_vars, output_vars):
     
     # Process each test case
     for test_case in test_cases:
-        # In a real implementation, this would call parse_smt_model
-        # Here we'll hardcode the results for demonstration
-        
-        # For each test case, we create a simulated final state
         ex_final_values = {}
         
-        # Process variables based on test case inputs
-        # This is a simplified example - in reality, you would run the model
-        # and extract the final values from the SMT solver
         for var_name in output_vars:
             # Create entries for output variables
             base_name = var_name.split('_')[0]
             if base_name not in ex_final_values:
                 ex_final_values[base_name] = {}
             
-            # Simulate versions (assuming we're tracking versions of variables)
+            # Simulate versions
             ex_final_values[base_name][0] = str(test_case.get(base_name, 0) * 2)  # Simple transformation for demo
         
         # Handle array variables if present
@@ -775,7 +765,7 @@ def validate_postcondition(test_cases, smt_formula, input_vars, output_vars):
             if var_name not in ex_final_values:
                 ex_final_values[var_name] = {}
             
-            # For demo purposes, we'll just copy the array
+            
             if isinstance(test_case[var_name], list):
                 for idx, val in enumerate(test_case[var_name]):
                     ex_final_values[var_name][idx] = str(val)

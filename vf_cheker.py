@@ -57,32 +57,13 @@ def check_equivalencee(program1: str):
             # with open(combined_path, 'w') as outf:
             #     outf.write("; Combined SMT for equivalence checking\n")
             #     outf.write("(set-logic QF_LIA)\n")  # Only one logic line allowed
-                
-            #     for line in smt1_lines:
-            #         if not line.startswith("(set-logic"):
-            #             outf.write(line + "\n")
-                
-            #     for line in smt2_lines:
-            #         if not line.startswith("(set-logic"):
-            #             outf.write(line + "\n")
-                
-            #     # Add constraint to check if results are different
-            #     # outf.write("; Check if results differ\n")
-            #     # outf.write("(assert (not (= p1_result p2_result)))\n")
-            #     # Modify this section in the combined SMT file creation
-            #     outf.write("; Check if results differ\n")
-            #     outf.write("(assert (not (= p1_result_0 p2_output_0)))\n")  # Use the actual variable names with _0
-            #     outf.write("(check-sat)\n")
-            #     outf.write("(get-model)\n")
+             
             
             # Step 6: Run Z3 to check for equivalence
             result, model = run_z3_model_check(smt1_path)
             
             # Step 7: Process the result
             if result == "unsat":
-                # Programs are equivalent if the inequality constraint is unsatisfiable
-                # Let's construct a simple model where programs behave the same
-                # We'll construct a simple example with x = 5 for illustration
                 example = {"x": "5", "p1_result": "same", "p2_result": "same"}
                 example_str = format_model_for_display(example)
                 
@@ -115,8 +96,7 @@ def check_equivalencee(program1: str):
                     initial_value = versions.get(0, "unknown")
                     counter_examples.append(f"{var_name} = {initial_value}")
                 
-                # Generate a new counterexample with different input values
-                # For simplicity, modify the existing values slightly
+                
                 counter_examples2 = []
                 for entry in counter_examples:
                     if "=" in entry:
