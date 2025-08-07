@@ -23,6 +23,23 @@ then run this command : git clone https://github.com/eshal-omar/Parsing-Tool.git
 
 Open vscode
 
-run this command in the terminal: pip install matplotlib networkx
+Select terminal button at the top left toolbar and select new terminal
 
-then run python gui.py
+Run this command in the terminal: pip install matplotlib networkx
+
+Then run: python gui.py
+
+This will open the application window and is ready to be used.
+
+
+## Video Demonstration
+
+# Verification Mode
+
+https://github.com/user-attachments/assets/f4aa5a5a-d08e-41af-83ae-984599d10881
+
+
+# Equivalence Mode 
+https://github.com/user-attachments/assets/c301e721-a2ae-46d5-8f32-549a0cf82913
+
+
