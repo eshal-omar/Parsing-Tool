@@ -1,6 +1,7 @@
 # Parsing Tool
 A tool that parses input algorithm and converts to Static Single Assignment (SSA) form. This tool helps analyze the correctness and equivalence of programs.
 
+
 ## Key Features
 The tool does the following 
 1. Parse simple programs input
@@ -10,9 +11,11 @@ The tool does the following
 o Verify correctness (assert statements hold)
 o Check whether two programs are semantically equivalent
 5. Display all intermediate steps (SSA form, SMT code, result) in the GUI
+   
 
 ## Tech Stack
 Python
+
 
 ## Setup Instructions
 Open command prompt
@@ -30,6 +33,7 @@ Run this command in the terminal: pip install matplotlib networkx
 Then run: python gui.py
 
 This will open the application window and is ready to be used.
+
 
 
 # Video Demonstration
