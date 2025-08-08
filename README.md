@@ -20,7 +20,7 @@ Python
 ## Setup Instructions
 Open command prompt
 
-CD into the directory you wish to store the applications folder. Command would be cd path to folder (eg cd C:\Users)
+CD into the directory you wish to store the applications folder. Command is:  cd path\to\folder (replace path\to\folder with your own path)
 
 then run this command : git clone https://github.com/eshal-omar/Parsing-Tool.git
 
