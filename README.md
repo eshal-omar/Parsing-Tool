@@ -2,7 +2,7 @@
 A tool that parses input algorithm and converts to Static Single Assignment (SSA) form. This tool helps analyze the correctness and equivalence of programs.
 
 
-## Key Features
+## Key Feature
 The tool does the following 
 1. Parse simple programs input
 2. Convert them into SSA (Static Single Assignment) form
